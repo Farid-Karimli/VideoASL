@@ -1,3 +1,7 @@
 .idea/*
+*.pyc
+.idea
+*.xml
+*.iml
 tutorial/UCF101_subset/*
 *.png
