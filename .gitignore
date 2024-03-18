@@ -5,3 +5,4 @@
 *.iml
 tutorial/UCF101_subset/*
 *.png
+*.mp4
