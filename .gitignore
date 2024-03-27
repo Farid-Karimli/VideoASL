@@ -6,8 +6,6 @@
 tutorial/UCF101_subset/*
 *.png
 *.mp4
-*.json
 .DS_Store
-MS-ASL/*.json
 MS-ASL/.DS_Store
 

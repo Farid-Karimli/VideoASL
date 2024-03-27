@@ -1,9 +1,6 @@
 """
 Download the videos from the MSASL dataset
 """
-
-
-
 from pytube import YouTube
 import os
 import sys
@@ -11,7 +8,10 @@ import json
 import requests
 
 # assuming you have installed the MSASL dataset in this directory
-PATH = "./MSASL_train.json"
+cwd = os.getcwd()
+splits = ["train", "val", "test"]
+paths = [f"{cwd}/MSASL_train.json", f"{cwd}/MSASL_val.json", f"{cwd}/MSASL_test.json"]
+print(paths)
 
 
 def progress_function(stream, chunk, bytes_remaining):
@@ -22,17 +22,25 @@ def complete_function(stream, file_handle):
     print("Download complete")
 
 
-with open(PATH, "r") as f:
-    data = json.load(f)
-
-for i in range(0, 10):
-    print(data[i]["url"])
-    url = data[i]["url"]
-    label = data[i]["label"]
-
+def download_video(video_url, output_path, file_name):
     try:
-        yt = YouTube(url, on_progress_callback=progress_function, on_complete_callback=complete_function)
-        yt.streams.filter(progressive=True, file_extension="mp4").first().download(output_path="./sample_videos")
+        yt = YouTube(video_url, on_progress_callback=progress_function, on_complete_callback=complete_function)
+        yt.streams.filter(progressive=True, file_extension="mp4").first().download(output_path=output_path,
+                                                                                   filename=file_name)
     except Exception as e:
         print(e)
-        continue
+
+
+class_file = json.load(open("MSASL_classes.json", "r"))
+
+for (split, path) in zip(splits, paths):
+    with open(path, "r") as f:
+        data = json.load(f)
+
+    for i in range(len(data)):
+        url = data[i]["url"]
+        label = data[i]["label"]
+        class_name = class_file[label]
+        print("Downloading video {} with label {}".format(url, label))
+        download_video(url, output_path=f"./sample_videos/{split}/{class_name}",
+                       file_name=f"{label}_{data[i]['clean_text']}.mp4")
