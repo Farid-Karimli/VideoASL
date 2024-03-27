@@ -7,8 +7,11 @@ import sys
 import json
 import requests
 
-# assuming you have installed the MSASL dataset in this directory
+
 cwd = os.getcwd()
+
+DATASET_PATH = f""
+
 splits = ["train", "val", "test"]
 paths = [f"{cwd}/MSASL_train.json", f"{cwd}/MSASL_val.json", f"{cwd}/MSASL_test.json"]
 print(paths)
@@ -42,5 +45,5 @@ for (split, path) in zip(splits, paths):
         label = data[i]["label"]
         class_name = class_file[label]
         print("Downloading video {} with label {}".format(url, label))
-        download_video(url, output_path=f"./sample_videos/{split}/{class_name}",
+        download_video(url, output_path=f"{DATASET_PATH}/{split}/{class_name}",
                        file_name=f"{label}_{data[i]['clean_text']}.mp4")
