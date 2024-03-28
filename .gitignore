@@ -9,3 +9,5 @@ tutorial/UCF101_subset/*
 .DS_Store
 MS-ASL/.DS_Store
 
+venv/*
+venv
