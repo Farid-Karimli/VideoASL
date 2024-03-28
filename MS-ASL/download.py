@@ -46,4 +46,4 @@ for (split, path) in zip(splits, paths):
         class_name = class_file[label]
         print("Downloading video {} with label {}".format(url, label))
         download_video(url, output_path=f"{DATASET_PATH}/{split}/{class_name}",
-                       file_name=f"{label}_{data[i]['clean_text']}.mp4")
+                       file_name=f"{label}_{data[i]['clean_text']}_{i}.mp4")
