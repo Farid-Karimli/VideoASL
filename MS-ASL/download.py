@@ -10,10 +10,13 @@ import requests
 
 cwd = os.getcwd()
 
-DATASET_PATH = f""
+BASE_DIR = "/projectnb/ds598/projects/VideoASL/"
+DATASET_PATH = "/projectnb/ds598/materials/datasets/MSASL"
+CLASS_FILE = BASE_DIR + "MS-ASL/MSASL_classes.json"
 
+SUBSET = 100
 splits = ["train", "val", "test"]
-paths = [f"{cwd}/MSASL_train.json", f"{cwd}/MSASL_val.json", f"{cwd}/MSASL_test.json"]
+paths = [f"{BASE_DIR}MS-ASL/MSASL_train.json", f"{BASE_DIR}MS-ASL/MSASL_val.json", f"{BASE_DIR}MS-ASL/MSASL_test.json"]
 print(paths)
 
 
@@ -33,17 +36,20 @@ def download_video(video_url, output_path, file_name):
     except Exception as e:
         print(e)
 
-
-class_file = json.load(open("MSASL_classes.json", "r"))
+class_file = json.load(open(CLASS_FILE, "r"))
 
 for (split, path) in zip(splits, paths):
+    print("------------")
+    print(split, "split")
     with open(path, "r") as f:
         data = json.load(f)
 
     for i in range(len(data)):
         url = data[i]["url"]
         label = data[i]["label"]
-        class_name = class_file[label]
-        print("Downloading video {} with label {}".format(url, label))
-        download_video(url, output_path=f"{DATASET_PATH}/{split}/{class_name}",
-                       file_name=f"{label}_{data[i]['clean_text']}_{i}.mp4")
+
+        if label < SUBSET: 
+            class_name = class_file[label]
+            print("Downloading video {} with label {}".format(url, label))
+            download_video(url, output_path=f"{DATASET_PATH}/{split}/{class_name}",
+                        file_name=f"{label}_{data[i]['clean_text']}_{i}.mp4")
